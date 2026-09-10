@@ -172,21 +172,38 @@ fi
 titulo "SERVICOS"
 
 if verificar_comando systemctl; then
+	webserver=$(systemctl list-units --type=service | grep -iE 'httpd|apache|nginx' | awk '{print $1}')
 	
-	nome=$(systemctl show httpd -p Description | sed 's/Description=//g')
-	state=$(systemctl show httpd -p ActiveState | sed 's/ActiveState=/Status= /g')
-	substate=$(systemctl show httpd -p SubState | sed 's/SubState=//g')
-	printf "${GREEN}Servidor Web:${RESET} $nome | $state $substate\n"
+	if [ -z "$webserver'" ]; then
+		printf "${YELLOW}Servidor Web:${RESET} Nenhum serviço encontrado ou ativo.\n"
+	else
+		lista_servicos=( $webserver )
+		for servico in "${lista_servicos[@]}"; do
+			nome=$(systemctl show $servico -p Description | sed 's/Description=//g')
+			state=$(systemctl show $servico -p ActiveState | sed 's/ActiveState=/Status= /g')
+			substate=$(systemctl show $servico -p SubState | sed 's/SubState=//g')
+			printf "${GREEN}Servidor Web:${RESET} $nome | $state $substate\n"
+		done
+	fi
 	
-	database=$(systemctl --type=service | egrep -i -m 1 'mysql|mariadb|postgresql|postgres|mongod|mongodb' | awk '{print $1}')
-	nomedb=$(systemctl show $database -p Description | sed 's/Description=//g')
-	dbstate=$(systemctl show $database -p ActiveState | sed 's/ActiveState=/Status= /g')
-	dbsubstate=$(systemctl show $database -p SubState | sed 's/SubState=//g')
-	printf "${GREEN}Banco de dados: ${RESET} $nomedb | $dbstate $dbsubstate\n"
+	database=$(systemctl list-units --type=service | grep -iE 'mysql|mariadb|postgresql|postgres|mongod|mongodb' | awk '{print $1}')
+	
+	if [ -z "$database" ]; then
+		printf "${YELLOW}Banco de dados:${RESET} Nenhum serviço encontrado ou ativo.\n"
+	else
+		lista_db=( $database )
+		for banco in "$lista_db[@]"; do
+			nomedb=$(systemctl show $database -p Description | sed 's/Description=//g')
+			dbstate=$(systemctl show $database -p ActiveState | sed 's/ActiveState=/Status= /g')
+			dbsubstate=$(systemctl show $database -p SubState | sed 's/SubState=//g')
+			printf "${GREEN}Banco de dados: ${RESET} $nomedb | $dbstate $dbsubstate\n"
+		done
+		
+	fi
 	
 fi
 
-	printf "${GREEN} Versao Ativa do PHP: ${RESET}\n" 
+	printf "${GREEN}Versao Ativa do PHP: ${RESET}\n" 
 	systemctl | egrep 'php[0-9][0-9]-php|php-5.[3-5]-fpm.service'
 echo ""
 echo "Diagnóstico concluído com sucesso | Desenvolvido por: Victor Alexandre"
