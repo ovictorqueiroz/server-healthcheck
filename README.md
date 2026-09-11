@@ -4,7 +4,7 @@ O cliente liga falando: 📞😡 -Meu site está fora do ar!
 
 Nesses cenários, o primeiro troubleshoot é verificar a saúde da máquina. `top`, `df -h`, `free -h` e muitos outros comandos para diagnóstico.
 
-Pensando nisso, com um pouco de bash e muita IA :sweat_smile:, eu criei um script para rodar em Ambientes Linux para rodar todos esses comandos, e mais alguns outros, numa tacada só!
+Pensando nisso, eu criei um script para rodar em Ambientes Linux para rodar todos esses comandos, e mais alguns outros, numa tacada só!
 
 ## O que o Script nos retorna?
 
