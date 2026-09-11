@@ -174,7 +174,7 @@ titulo "SERVICOS"
 if verificar_comando systemctl; then
 	webserver=$(systemctl list-units --type=service | grep -iE 'httpd|apache|nginx' | awk '{print $1}')
 	
-	if [ -z "$webserver'" ]; then
+	if [ -z "$webserver" ]; then
 		printf "${YELLOW}Servidor Web:${RESET} Nenhum serviço encontrado ou ativo.\n"
 	else
 		lista_servicos=( $webserver )
@@ -192,10 +192,10 @@ if verificar_comando systemctl; then
 		printf "${YELLOW}Banco de dados:${RESET} Nenhum serviço encontrado ou ativo.\n"
 	else
 		lista_db=( $database )
-		for banco in "$lista_db[@]"; do
-			nomedb=$(systemctl show $database -p Description | sed 's/Description=//g')
-			dbstate=$(systemctl show $database -p ActiveState | sed 's/ActiveState=/Status= /g')
-			dbsubstate=$(systemctl show $database -p SubState | sed 's/SubState=//g')
+		for banco in "${lista_db[@]}"; do
+			nomedb=$(systemctl show $banco -p Description | sed 's/Description=//g')
+			dbstate=$(systemctl show $banco -p ActiveState | sed 's/ActiveState=/Status= /g')
+			dbsubstate=$(systemctl show $banco -p SubState | sed 's/SubState=//g')
 			printf "${GREEN}Banco de dados: ${RESET} $nomedb | $dbstate $dbsubstate\n"
 		done
 		
@@ -204,6 +204,6 @@ if verificar_comando systemctl; then
 fi
 
 	printf "${GREEN}Versao Ativa do PHP: ${RESET}\n" 
-	systemctl | egrep 'php[0-9][0-9]-php|php-5.[3-5]-fpm.service'
+	systemctl | grep -E 'php[0-9][0-9]-php|php-5.[3-5]-fpm.service'
 echo ""
 echo "Diagnóstico concluído com sucesso | Desenvolvido por: Victor Alexandre"
