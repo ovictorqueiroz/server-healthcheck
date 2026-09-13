@@ -201,9 +201,18 @@ if verificar_comando systemctl; then
 		
 	fi
 	
-fi
+	
+	phpServices=$(systemctl | grep -E 'php[0-9][0-9]-php|php-5.[3-5]-fpm.service' | awk '{print $1}')
 
-	printf "${GREEN}Versao Ativa do PHP: ${RESET}\n" 
-	systemctl | grep -E 'php[0-9][0-9]-php|php-5.[3-5]-fpm.service'
+	if [ -z "$phpServices" ]; then
+		printf "${YELLOW}Versão Ativa do PHP: Nenhum serviço encontrado ou ativo. ${RESET}\n"
+	else
+		printf "${GREEN}Versão Ativa do PHP: ${RESET}\n"
+		lista_php=( $phpServices)
+		for versaoPHP in "${lista_php[@]}"; do
+			printf "$versaoPHP\n"
+		done
+	fi
+fi
 echo ""
 echo "Diagnóstico concluído com sucesso | Desenvolvido por: Victor Alexandre"
