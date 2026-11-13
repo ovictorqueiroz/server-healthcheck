@@ -226,6 +226,7 @@ continuar() {
             ;;
         2)
             printf "Encerrando diagnóstico.\n"
+			rm healthcheck.sh
             exit 0
             ;;
         *)
