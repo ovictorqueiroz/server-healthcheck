@@ -9,7 +9,7 @@ GREEN="\033[32m"
 YELLOW="\033[33m"
 BLUE="\033[34m"
 CYAN="\e[1;36m"
-PURPLE="\e[1;35m"
+PURPLE="\e[1;95m"
 RESET="\033[0m"
 
 # =========================
@@ -113,6 +113,7 @@ diagnosticoServidor() {
 # =========================
 
 diagnosticoRede() {
+	tituloSecao "REDES E CONECTIVIDADE"
     titulo "INTERFACE DE REDE"
     if verificar_comando ip; then
         ip -br a
@@ -122,6 +123,7 @@ diagnosticoRede() {
     if verificar_comando ping iputils-ping; then
         ping -c 4 -W 2 google.com
     fi
+	continuar
 }
 
 # =========================
@@ -129,6 +131,7 @@ diagnosticoRede() {
 # =========================
 
 diagnosticoPortasServicos() {
+	tituloSecao "PORTAS E SERVIÇOS"
     # --- PORTAS ---
     titulo "PORTAS"
     if verificar_comando ss iproute2; then
@@ -199,6 +202,7 @@ diagnosticoPortasServicos() {
             done <<< "$php_fpm_units"
         fi
     fi
+	continuar
 }
 
 # =========================
